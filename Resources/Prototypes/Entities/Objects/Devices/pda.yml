@@ -96,6 +96,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: PdaRngCartridge
   - type: ActivatableUI
     key: enum.PdaUiKey.Key
     singleUser: true
@@ -161,6 +162,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: PdaRngCartridge
         - id: WantedListCartridge
 
 - type: entity
@@ -176,6 +178,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: PdaRngCartridge
         - id: MedTekCartridge
 
 - type: entity
@@ -437,6 +440,7 @@
         children:
         - id: CrewManifestCartridge
         - id: NewsReaderCartridge
+        - id: PdaRngCartridge
   - type: PermanentStatusEffects # for random sentience event
     statusEffects:
     - TraitStatusEffectMuted
@@ -496,6 +500,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: PdaRngCartridge
         - id: AstroNavCartridge
 
 - type: entity
@@ -542,6 +547,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: PdaRngCartridge
         - id: AstroNavCartridge
 
 - type: entity
@@ -893,6 +899,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: PdaRngCartridge
         - id: WantedListCartridge
         - id: LogProbeCartridge
 
@@ -964,6 +971,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: PdaRngCartridge
         - id: MedTekCartridge
         - id: WantedListCartridge
         - id: LogProbeCartridge
@@ -992,6 +1000,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: PdaRngCartridge
         - id: LogProbeCartridge
         - id: WantedListCartridge
         - id: MedTekCartridge
@@ -1124,6 +1133,7 @@
         children:
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
+        - id: PdaRngCartridge
 
 - type: entity
   parent: [ SyndiPDA, BaseSyndicateContraband ]
@@ -1162,6 +1172,7 @@
         children:
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
+        - id: PdaRngCartridge
         - id: MedTekCartridge
 
 - type: entity
@@ -1208,6 +1219,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: PdaRngCartridge
         - id: MedTekCartridge
         - id: WantedListCartridge
         - id: LogProbeCartridge
@@ -1400,6 +1412,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: PdaRngCartridge
         - id: WantedListCartridge
         - id: LogProbeCartridge
 
@@ -1430,6 +1443,7 @@
         - id: NotekeeperCartridge
         - id: NanoTaskCartridge
         - id: NewsReaderCartridge
+        - id: PdaRngCartridge
         - id: WantedListCartridge
         - id: MedTekCartridge
 

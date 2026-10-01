@@ -173,3 +173,20 @@
         sprite: Objects/Devices/gps.rsi
         state: icon
     - type: AstroNavCartridge
+
+- type: entity
+  parent: BasePDACartridge
+  id: PdaRngCartridge
+  name: PDA RNG cartridge
+  description: A program that prints a one-time random number rarity ticket.
+  components:
+  - type: Sprite
+    state: cart-y
+  - type: UIFragment
+    ui: !type:PdaRngUi
+  - type: Cartridge
+    programName: pda-rng-program-name
+    icon:
+      sprite: Objects/Fun/dice.rsi
+      state: d6_6
+  - type: PdaRngCartridge
