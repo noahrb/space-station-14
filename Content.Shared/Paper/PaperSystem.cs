@@ -127,13 +127,27 @@ public sealed partial class PaperSystem : EntitySystem
                     return;
                 }
 
-                var ev = new PaperWriteAttemptEvent(entity.Owner);
-                RaiseLocalEvent(args.User, ref ev);
-                if (ev.Cancelled)
+                var paperEv = new PaperWriteAttemptEvent(entity.Owner);
+                RaiseLocalEvent(entity.Owner, ref paperEv);
+                if (paperEv.Cancelled)
                 {
-                    if (ev.FailReason is not null)
+                    if (paperEv.FailReason is not null)
                     {
-                        var fileWriteMessage = Loc.GetString(ev.FailReason);
+                        var paperWriteMessage = Loc.GetString(paperEv.FailReason);
+                        _popupSystem.PopupClient(paperWriteMessage, entity.Owner, args.User);
+                    }
+
+                    args.Handled = true;
+                    return;
+                }
+
+                var userEv = new PaperWriteAttemptEvent(entity.Owner);
+                RaiseLocalEvent(args.User, ref userEv);
+                if (userEv.Cancelled)
+                {
+                    if (userEv.FailReason is not null)
+                    {
+                        var fileWriteMessage = Loc.GetString(userEv.FailReason);
                         _popupSystem.PopupClient(fileWriteMessage, entity.Owner, args.User);
                     }
 
@@ -184,9 +198,14 @@ public sealed partial class PaperSystem : EntitySystem
 
     private void OnInputTextMessage(Entity<PaperComponent> entity, ref PaperInputTextMessage args)
     {
-        var ev = new PaperWriteAttemptEvent(entity.Owner);
-        RaiseLocalEvent(args.Actor, ref ev);
-        if (ev.Cancelled)
+        var paperEv = new PaperWriteAttemptEvent(entity.Owner);
+        RaiseLocalEvent(entity.Owner, ref paperEv);
+        if (paperEv.Cancelled)
+            return;
+
+        var userEv = new PaperWriteAttemptEvent(entity.Owner);
+        RaiseLocalEvent(args.Actor, ref userEv);
+        if (userEv.Cancelled)
             return;
 
         if (args.Text.Length <= entity.Comp.ContentSize)

@@ -15,6 +15,8 @@
     - id: ClothingOuterArmorBasicSlim
     - id: WeaponShotgunDoubleBarreledRubber
     - id: DrinkShaker
+    - id: DrinkCoaster
+      amount: 4
     - id: ClothingEyesHudBeer
     - id: HandLabeler
     - id: DrinkBeerBottleFull

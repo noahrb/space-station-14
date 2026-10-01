@@ -1,0 +1,43 @@
+- type: entity
+  parent: BasePaper
+  id: DrinkCoaster
+  name: drink coaster
+  description: A round bar coaster. Flip it over to scribble a note on the back with a pen.
+  components:
+  - type: Sprite
+    sprite: Objects/Specific/Service/drink_coaster.rsi
+    layers:
+    - state: icon
+    - state: back
+      map: ["enum.DrinkCoasterVisualLayers.Side"]
+      visible: false
+    - state: words
+      map: ["enum.PaperVisualLayers.Writing"]
+      visible: false
+  - type: Item
+    sprite: Objects/Specific/Service/drink_coaster.rsi
+    size: Tiny
+  - type: Paper
+    contentSize: 256
+  - type: PaperLabelType
+  - type: PaperVisuals
+    backgroundImagePath: "/Textures/Interface/Paper/paper_background_default.svg.96dpi.png"
+    backgroundModulate: "#c8a066"
+    backgroundPatchMargin: 16.0, 16.0, 16.0, 16.0
+    contentMargin: 12.0, 12.0, 12.0, 12.0
+    maxWritableArea: 280.0, 120.0
+    fontAccentColor: "#3d2817"
+  - type: DrinkCoaster
+  - type: ActivatableUI
+    key: enum.PaperUiKey.Key
+    requiresComplex: false
+  - type: UserInterface
+    interfaces:
+      enum.PaperUiKey.Key:
+        type: PaperBoundUserInterface
+  - type: Appearance
+  - type: Tag
+    tags:
+    - Paper
+  - type: StaticPrice
+    price: 5

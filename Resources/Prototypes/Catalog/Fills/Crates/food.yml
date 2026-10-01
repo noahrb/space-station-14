@@ -97,6 +97,8 @@
           amount: 5
         - id: DrinkShaker
           amount: 2
+        - id: DrinkCoaster
+          amount: 8
         - id: DrinkOrangeJuice
           amount: 2
         - id: DrinkLimeJuice
