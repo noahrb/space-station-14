@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Linq;
-using Content.Shared.Chemistry.Components.SolutionManager;
 using Content.Shared.Chemistry.Reagent;
 using Content.Shared.FixedPoint;
 using JetBrains.Annotations;
@@ -58,12 +57,6 @@ namespace Content.Shared.Chemistry.Components
         /// </summary>
         [DataField]
         public float Temperature { get; set; } = 293.15f;
-
-        /// <summary>
-        ///     The name of this solution, if it is contained in some <see cref="SolutionContainerManagerComponent"/>
-        /// </summary>
-        [DataField]
-        public string? Name;
 
         /// <summary>
         ///     Checks if a solution can fit into the container.
@@ -167,7 +160,12 @@ namespace Content.Shared.Chemistry.Components
 
         public Solution(Solution solution)
         {
-            Contents = solution.Contents.ShallowClone();
+            Contents = new(solution.Contents.Count);
+            foreach (var item in solution.Contents)
+            {
+                Contents.Add(item.Clone());
+            }
+
             Volume = solution.Volume;
             MaxVolume = solution.MaxVolume;
             Temperature = solution.Temperature;
@@ -183,6 +181,11 @@ namespace Content.Shared.Chemistry.Components
             return new Solution(this);
         }
 
+        public override string ToString()
+        {
+            return string.Join("; ", Contents);
+        }
+
         [AssertionMethod]
         public void ValidateSolution()
         {
@@ -195,7 +198,7 @@ namespace Content.Shared.Chemistry.Components
             DebugTools.Assert(!Contents.Any(x => x.Quantity <= FixedPoint2.Zero));
 
             // No duplicate reagents iDs
-            DebugTools.Assert(Contents.Select(x => x.Reagent).ToHashSet().Count == Contents.Count);
+            DebugTools.Assert(Contents.Select(x => x.Reagent).ToHashSet().Count == Contents.Count, $"Solution: {this}, contained duplcate contents {Contents}");
 
             // If it isn't flagged as dirty, check heat capacity is correct.
             if (!_heatCapacityDirty)
@@ -303,6 +306,22 @@ namespace Content.Shared.Chemistry.Components
         /// </summary>
         [Pure]
         public FixedPoint2 GetTotalPrototypeQuantity(params ProtoId<ReagentPrototype>[] prototypes)
+        {
+            var total = FixedPoint2.Zero;
+            foreach (var (reagent, quantity) in Contents)
+            {
+                if (prototypes.Contains(reagent.Prototype))
+                    total += quantity;
+            }
+
+            return total;
+        }
+
+        /// <summary>
+        /// Overload of <see cref="GetTotalPrototypeQuantity(ProtoId{ReagentPrototype}[])"/>
+        /// using a set instead of an array of ids (allows for potentially faster internal .Contains operations than an array)
+        /// </summary>
+        public FixedPoint2 GetTotalPrototypeQuantity(ISet<ProtoId<ReagentPrototype>> prototypes)
         {
             var total = FixedPoint2.Zero;
             foreach (var (reagent, quantity) in Contents)
@@ -475,11 +494,44 @@ namespace Content.Shared.Chemistry.Components
         }
 
         /// <summary>
+        ///     Scales the amount of solution.
+        /// </summary>
+        /// <param name="scale">The scalar to modify the solution by.</param>
+        public void ScaleSolution(FixedPoint2 scale)
+        {
+            ScaleSolution(scale.Float());
+        }
+
+        /// <summary>
+        ///     Scales the amount of solution to a given target.
+        /// </summary>
+        /// <param name="target">The volume the solutions should have after scaling.</param>
+        public void ScaleTo(FixedPoint2 target)
+        {
+            if (Volume == FixedPoint2.Zero || Volume == target)
+                return;
+
+            if (target == FixedPoint2.Zero)
+            {
+                RemoveAllSolution();
+                return;
+            }
+
+            var nearestIntScale = (int)Math.Ceiling(target.Float() / Volume.Float());
+            ScaleSolution(nearestIntScale);
+
+            var overflow = Volume - target;
+            RemoveSolution(overflow);
+        }
+
+        /// <summary>
         ///     Attempts to remove an amount of reagent from the solution.
         /// </summary>
         /// <param name="toRemove">The reagent to be removed.</param>
+        /// <param name="removedReagents">Optional list to receive consumed reagents. </param>
         /// <returns>How much reagent was actually removed. Zero if the reagent is not present on the solution.</returns>
-        public FixedPoint2 RemoveReagent(ReagentQuantity toRemove, bool preserveOrder = false, bool ignoreReagentData = false)
+        public FixedPoint2 RemoveReagent(ReagentQuantity toRemove, bool preserveOrder = false, bool ignoreReagentData = false,
+            List<ReagentQuantity>? removedReagents = null)
         {
             if (toRemove.Quantity <= FixedPoint2.Zero)
                 return FixedPoint2.Zero;
@@ -522,6 +574,9 @@ namespace Content.Shared.Chemistry.Components
                 var split = ((long)toRemove.Quantity.Value) * curQuantity.Value / totalRemoveVolume;
 
                 var splitQuantity = FixedPoint2.FromCents((int)split);
+
+                if (splitQuantity > FixedPoint2.Zero)
+                    removedReagents?.Add(new ReagentQuantity(reagent, FixedPoint2.Min(curQuantity, splitQuantity)));
 
                 var newQuantity = curQuantity - splitQuantity;
                 _heatCapacityDirty = true;
@@ -964,6 +1019,16 @@ namespace Content.Shared.Chemistry.Components
                 dict[proto] = quantity + dict.GetValueOrDefault(proto);
             }
             return dict;
+        }
+
+        public void SetReagentData(List<ReagentData>? data)
+        {
+            for (var i = 0; i < Contents.Count; i++)
+            {
+                var old = Contents[i];
+                Contents[i] = new ReagentQuantity(new ReagentId(old.Reagent.Prototype, data), old.Quantity);
+            }
+            ValidateSolution();
         }
     }
 }

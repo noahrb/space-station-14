@@ -1,4 +1,35 @@
 - type: entity
+  name: bang hitscan 1dmg
+  parent: BaseWeaponBatterySmall
+  id: WeaponHitscanDebug
+  description: pew pew!
+  suffix: DEBUG
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Guns/Pistols/debug.rsi
+    state: icon
+  - type: Clothing
+    sprite: Objects/Weapons/Guns/Pistols/debug.rsi
+  - type: Gun
+    fireRate: 10
+    availableModes:
+    - SemiAuto
+    - FullAuto
+  - type: BatteryAmmoProvider
+    proto: DebugLaser
+    fireCost: 1
+  - type: BatterySelfRecharger
+    autoRechargeRate: 1000
+
+- type: entity
+  name: bang hitscan gibber
+  parent: WeaponHitscanDebug
+  id: WeaponHitscanDebugGib
+  components:
+  - type: BatteryAmmoProvider
+    proto: DebugLaserGib
+
+- type: entity
   name: bang, ded
   parent: BaseWeaponPistol
   id: WeaponPistolDebug
@@ -114,3 +145,29 @@
     damage:
       types:
         Blunt: 200
+
+- type: entity
+  name: unbang stick
+  parent: BaseItem
+  id: MeleeDebugUnbang
+  description: hit soft ye
+  suffix: DEBUG
+  components:
+  - type: Sprite
+    sprite: Objects/Weapons/Melee/debug.rsi
+    state: icon
+  - type: MeleeWeapon
+    damage:
+      types:
+        Blunt: 0
+  - type: Item
+    size: Tiny
+    sprite: Objects/Weapons/Melee/debug.rsi
+  - type: EntityEffectMelee
+    effects:
+    - !type:EvenHealthChange
+      damage:
+        Burn: -200
+        Toxin: -200
+        Airloss: -200
+        Brute: -200

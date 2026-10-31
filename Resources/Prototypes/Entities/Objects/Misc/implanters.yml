@@ -47,6 +47,7 @@
     - FakeMindShieldImplant
     - RadioImplant
     - ChameleonControllerImplant
+    - VoiceMaskImplant
     deimplantFailureDamage:
       types:
         Cellular: 50
@@ -80,6 +81,9 @@
     interfaces:
       enum.DeimplantUiKey.Key:
         type: DeimplantBoundUserInterface
+  - type: Tag
+    tags:
+    - SmeltingImmune
 
 - type: entity
   id: Implanter
@@ -152,7 +156,8 @@
           True: {state: broken}
           False: {state: implanter1}
   - type: Tag
-    tags: []
+    tags:
+    - SmeltingImmune
 
 #Fun implanters
 
@@ -255,6 +260,14 @@
   components:
   - type: Implanter
     implant: ChameleonControllerImplant
+
+- type: entity
+  id: VoiceMaskImplanter
+  name: identity mask implanter
+  parent: BaseImplantOnlyImplanterSyndi
+  components:
+  - type: Implanter
+    implant: VoiceMaskImplant
 
 #Nuclear Operative/Special implanters
 
